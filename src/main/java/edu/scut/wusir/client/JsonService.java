@@ -14,6 +14,7 @@ public class JsonService {
 		return JSON.parseObject(mes, msg);
 	}
 	
+	
 	public static String getJsonStringFromObject(Message message){
 		
 		return JSON.toJSONString(message);
