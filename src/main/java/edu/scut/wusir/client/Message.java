@@ -6,7 +6,6 @@ public class Message {
 	String message;
 	// 消息发送类型 1、登录消息类型 2、用户发送消息类型
 	int type;
-
 	
 	public String getReceiveUserName() {
 		return receiveUserName;
