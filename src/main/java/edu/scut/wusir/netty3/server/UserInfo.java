@@ -1,4 +1,4 @@
-package edu.scut.wusir.server;
+package edu.scut.wusir.netty3.server;
 
 public class UserInfo {
 	private String userName;

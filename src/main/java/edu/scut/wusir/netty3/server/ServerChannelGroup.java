@@ -1,4 +1,4 @@
-package edu.scut.wusir.server;
+package edu.scut.wusir.netty3.server;
 
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.group.ChannelGroup;

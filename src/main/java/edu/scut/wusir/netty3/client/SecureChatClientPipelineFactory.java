@@ -1,4 +1,4 @@
-package edu.scut.wusir.client;
+package edu.scut.wusir.netty3.client;
 
 import static org.jboss.netty.channel.Channels.*;
 

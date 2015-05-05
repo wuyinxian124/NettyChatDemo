@@ -1,4 +1,4 @@
-package edu.scut.wusir.server;
+package edu.scut.wusir.netty3.server;
 
 import java.util.logging.Logger;
 import org.jboss.netty.channel.ChannelHandlerContext;
