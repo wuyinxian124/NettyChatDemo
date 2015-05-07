@@ -1,12 +1,10 @@
-package edu.scut.wusir;
+package edu.scut.wusir.javawebsocket;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
-
-import edu.scut.wusir.javawebsocket.WebsocketC;
 
 
 public class StartClient {
