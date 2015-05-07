@@ -2,6 +2,8 @@ package edu.scut.wusir.netty4.server;
 
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.*;
 import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.*;
@@ -9,8 +11,13 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
+import io.netty.util.concurrent.ImmediateEventExecutor;
 
 public class Fjs {
+
+	private final ChannelGroup group = new DefaultChannelGroup(
+			ImmediateEventExecutor.INSTANCE);
+
 	public void run() throws Exception {
 
 		// 这个是用于serversocketchannel的eventloop
@@ -30,7 +37,7 @@ public class Fjs {
 
 			// 为accept channel的pipeline预添加的inboundhandler
 			b.childHandler(new ChannelInitializer<SocketChannel>() {
-				
+
 				// 当新连接accept的时候，这个方法会调用
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
@@ -39,20 +46,23 @@ public class Fjs {
 					// ch.pipeline().addLast(new WriteTimeoutHandler(1));
 					// 用于解析http报文的handler
 					ch.pipeline().addLast("decoder", new HttpRequestDecoder());
-					
+
 					// 用于将解析出来的数据封装成http对象，httprequest什么的
 					ch.pipeline().addLast("aggregator",
-							new HttpObjectAggregator(65536)); 
-					
+							new HttpObjectAggregator(65536));
+
 					// 用于将response编码成httpresponse报文发送
-					ch.pipeline().addLast("encoder", new HttpResponseEncoder()); 
-					
+					ch.pipeline().addLast("encoder", new HttpResponseEncoder());
+
 					// websocket的handler部分定义的，它会自己处理握手等操作
 					ch.pipeline().addLast("handshake",
-							new WebSocketServerProtocolHandler("", "", true)); 
+							new WebSocketServerProtocolHandler("", "", true));
 					// ch.pipeline().addLast("chunkedWriter", new
 					// ChunkedWriteHandler());
 					// ch.pipeline().addLast(new HttpHanlder());
+					ch.pipeline().addLast("verify",new VerifyHandler());
+					
+					
 					ch.pipeline().addLast(new WebSocketHandler());
 				}
 
@@ -61,7 +71,7 @@ public class Fjs {
 			// 会为其绑定本地端口，并对其进行初始化，为其的pipeline加一些默认的handler
 			ChannelFuture f = b.bind(8877).sync();
 			// 相当于在这里阻塞，直到serverchannel关闭
-			f.channel().closeFuture().sync(); 
+			f.channel().closeFuture().sync();
 		} finally {
 			bossGroup.shutdownGracefully();
 			workerGroup.shutdownGracefully();
