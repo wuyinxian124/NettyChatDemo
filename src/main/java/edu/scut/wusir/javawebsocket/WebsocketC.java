@@ -12,25 +12,29 @@ public class WebsocketC extends WebSocketClient {
 	public WebsocketC(URI serverUri, Draft draft) {
 		super(serverUri, draft);
 	}
+	
+	public WebsocketC(URI serverUri){
+		super(serverUri);
+	}
 
 	@Override
 	public void onOpen(ServerHandshake handshakedata) {
-		
+		System.out.println("You are connected to ChatServer: " + getURI()  );
 	}
 
 	@Override
 	public void onMessage(String message) {
-		System.out.println("收到信息 ，执行 onMessage" + message);
+		System.out.println("got: " + message  );
 	}
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		System.out.println("关闭 ，执行 onClose");
+		System.out.println( "You have been disconnected from: " + getURI() + "; Code: " + code + " " + reason );
 	}
 
 	@Override
 	public void onError(Exception ex) {
-		System.out.println("有异常 ，执行 onError");
+		System.out.println( "Exception occured ...\n" + ex );
 	}
 
 	public void verifyUser(String username,String verifyCode,String url){
